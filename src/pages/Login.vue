@@ -2,7 +2,7 @@
 	<div>
 		<b-container class="bv-example-row ">
 			<b-row class="justify-content-md-center">
-				<b-form @submit="onSubmit" class="text-left custom-form">
+				<b-form @submit="handleSubmit" class="text-left custom-form">
       		<b-form-group label="Username">
 						<b-form-input
 							type="text"
@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import CryptoJS from 'crypto-js'
 export default {
 	data() {
 		return {
@@ -34,6 +35,14 @@ export default {
 				username: '',
 				password: ''
 			}
+		}
+	},
+
+	methods: {
+		handleSubmit(e) {
+			e.preventDefault()
+			const encrypted = CryptoJS.AES.encrypt(this.payload.password, process.env.VUE_APP_SECRET).toString();
+			console.log(encrypted)
 		}
 	}
 
