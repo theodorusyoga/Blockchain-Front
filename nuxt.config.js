@@ -34,6 +34,7 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    { src: '~plugins/vue-toasted.js', ssr: false },
   ],
 
   /*
@@ -46,6 +47,7 @@ module.exports = {
     'bootstrap-vue/nuxt',
     '@nuxtjs/dotenv'
   ],
+  
   /*
   ** Axios module configuration
   */

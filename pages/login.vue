@@ -1,7 +1,7 @@
 <template>
   <div>
-    <b-container class="bv-example-row ">
-      <b-row class="justify-content-md-center">
+    <b-container class="bv-example-row custom-row">
+      <b-row>
         <b-form
           class="text-left custom-form"
           @submit="handleSubmit"
@@ -31,7 +31,8 @@
 </template>
 
 <script>
-import CryptoJS from 'crypto-js'
+import Cookies from 'js-cookie'
+import { login } from '../utils/Api.js'
 export default {
 	data() {
 		return {
@@ -43,10 +44,27 @@ export default {
 	},
 
 	methods: {
-		handleSubmit(e) {
-			e.preventDefault()
-			const encrypted = CryptoJS.AES.encrypt(this.payload.password, process.env.VUE_APP_SECRET).toString();
-			console.log(encrypted)
+		async handleSubmit(e) {
+      e.preventDefault()
+      await login(this.payload).then((response)=> {
+        Cookies.set('token', response.data.token)
+        this.$toasted.show('Login Success', { 
+          theme: "primary",
+          type: 'success',
+          position: "top-right",
+          onComplete: this.$router.push('/'),
+          duration : 1000
+        }).goAway(500)
+      })
+      .catch((error)=> {
+        this.$toasted.show(error.response.data.message, { 
+          theme: "primary",
+          type: "error",
+          position: "top-right",
+          duration : 5000
+        })
+      })
+			
 		}
 	}
 
@@ -54,10 +72,17 @@ export default {
 </script>
 
 <style lang="scss">
+.custom-row {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   .custom-form {
-	  border: 1px solid gainsboro;
-	  border-radius: 4px;
+    border: 1px solid gainsboro;
+    border-radius: 4px;
     min-width: 300px;
     padding: 20px;
-	}
+  }
+}
+  
 </style>
