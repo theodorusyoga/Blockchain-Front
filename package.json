@@ -1,7 +1,7 @@
 {
   "name": "tebexfe",
   "version": "1.0.0",
-  "description": "Frontend for Tebex Virtual Currency",
+  "description": "Information Dashboard for UnJDead.store",
   "author": "Theodorus",
   "private": true,
   "scripts": {
@@ -20,7 +20,10 @@
     "bootstrap-vue": "^2.0.0-beta",
     "cross-env": "^5.2.0",
     "crypto-js": "^3.1.9-1",
-    "nuxt": "^2.0.0"
+    "nouislider": "^12.1.0",
+    "nuxt": "^2.0.0",
+    "vue-lazyload": "^1.2.6",
+    "vue2-transitions": "^0.2.3"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",
