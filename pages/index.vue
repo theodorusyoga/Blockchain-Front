@@ -37,10 +37,28 @@
 
 <script>
 import Logo from '~/components/Logo.vue'
+import { authentication } from '../middleware/authenticated.js' 
+import { getDataBalance } from '../utils/Api';
 
 export default {
   components: {
     Logo
+  },
+
+  beforeCreate() {
+    const data = authentication()
+      if (!data) {
+        this.$router.push('/login')
+      }
+  },
+  async mounted() {
+    await this.getData()
+  },
+  methods: {
+    async getData() {
+      const data = await authentication()
+      const response = await getDataBalance(data.id)
+    }
   }
 }
 </script>
