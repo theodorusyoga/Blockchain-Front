@@ -1,6 +1,6 @@
 <template>
-<div v-if="true" class="profile-page">
-   <section class="section-profile-cover section-shaped my-0">
+    <div class="profile-page">
+        <section class="section-profile-cover section-shaped my-0">
             <div class="shape shape-style-1 shape-primary shape-skew alpha-4">
                 <span></span>
                 <span></span>
@@ -10,88 +10,139 @@
                 <span></span>
                 <span></span>
             </div>
-    </section>
-</div>
-  <section v-else class="container">
-    <div>
-      <logo/>
-      <h1 class="title">
-        tebexfe
-      </h1>
-      <h2 class="subtitle">
-        Frontend for Tebex Virtual Currency
-      </h2>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          class="button--green">Documentation</a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey">GitHub</a>
-      </div>
+        </section>
+        <section class="section section-skew">
+            <div class="container">
+                <card shadow class="card-profile mt--300" no-body>
+                    <div class="px-4">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-3 order-lg-2">
+                                <div class="card-profile-image">
+                                    <a href="#">
+                                        <img v-lazy="'img/theme/team-4-800x800.jpg'" class="rounded-circle">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 order-lg-3 text-lg-right align-self-lg-center">
+                                <div class="card-profile-actions py-4 mt-lg-0">
+                                    <base-button type="info" size="sm" class="mr-4">Connect</base-button>
+                                    <base-button type="default" size="sm" class="float-right">Message</base-button>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 order-lg-1">
+                                <div class="card-profile-stats d-flex justify-content-center">
+                                    <div>
+                                        <span class="heading">22</span>
+                                        <span class="description">Friends</span>
+                                    </div>
+                                    <div>
+                                        <span class="heading">10</span>
+                                        <span class="description">Photos</span>
+                                    </div>
+                                    <div>
+                                        <span class="heading">89</span>
+                                        <span class="description">Comments</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row d-flex justify-content-center mt-5"> 
+                            <table v-if="data.length > 0 && !isLoading">
+                              <thead>
+                                <tr>
+                                  <th>No</th>
+                                  <th>Name</th>
+                                  <th>Dollars</th>
+                                  <th>Amount</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr v-for="(data, index) in data" :key="data.unique_id">
+                                  <td>{{index+1}}</td>
+                                  <td>{{data.name}}</td>
+                                  <td>{{data.dollars}}</td>
+                                  <td>{{data.amount}}</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                            <div v-else-if="data.length === 0 && isLoading">
+                            <vue-loading type="bars" color="rgb(32, 160, 255)" :size="{ width: '50px', height: '50px' }"></vue-loading>
+                            </div>
+                            <div v-else>
+                              <base-alert type="info">
+                                <span class="alert-inner--text"><strong>Info!</strong> Data is Not Available</span>
+                              </base-alert>
+                            </div>
+                        </div>
+                        <div class="mt-5 py-5 border-top text-center">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-9">
+                                    <p>An artist of considerable range, Ryan — the name taken by Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs and records all of his own music, giving it a warm, intimate feel with a solid groove structure. An artist of considerable range.</p>
+                                    <a href="#">Show more</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </card>
+            </div>
+        </section>
     </div>
-  </section>
 </template>
 
 <script>
 import Logo from '~/components/Logo.vue'
-import { authentication } from '../middleware/authenticated.js' 
-import { getDataBalance } from '../utils/Api';
+import { VueLoading } from 'vue-loading-template'
+import { getDataBalances } from '../utils/Api';
 
 export default {
   components: {
-    Logo
+    Logo,
+    VueLoading
   },
 
-  beforeCreate() {
-    const data = authentication()
-      if (!data) {
-        this.$router.push('/login')
-      }
+  data() {
+    return {
+      isLoading: true,
+      data: []
+    }
   },
-  async mounted() {
-    await this.getData()
+  mounted() {
+    this.getData()
   },
   methods: {
     async getData() {
-      const data = await authentication()
-      const response = await getDataBalance(data.id)
+      this.isLoading = true
+      await getDataBalances()
+      .then(({data})=> {
+        this.data = data
+        this.isLoading = false
+      })
+      .catch((error) => {
+        this.$toasted.show('Oops something happen please reload page!', {
+          type: 'error',
+          duration: 5000
+        })
+        this.isLoading = false
+      })
     }
   }
 }
 </script>
 
-<style>
-
-.container {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+<style lang="scss">
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
 }
 
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
 }
 
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
+tr:nth-child(even) {
+  background-color: #dddddd;
 }
 </style>

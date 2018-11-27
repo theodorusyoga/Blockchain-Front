@@ -36,6 +36,7 @@ module.exports = {
   plugins: [
     { src: '~/plugins/argon-kit', ssr: false},
     { src: '~plugins/vue-toasted.js', ssr: false },
+    { src: '~plugins/vue-loading.js', ssr: false }
   ],
 
   /*

@@ -26,3 +26,12 @@ export const getDataBalance = id => {
   }
   return axios(config)
 }
+
+export const getDataBalances = () => {
+  const config = {
+    url: `${BASE_URL}/users/balances`,
+    method: 'get',
+    headers: header
+  }
+  return axios(config)
+}
