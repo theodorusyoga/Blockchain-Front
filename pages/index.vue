@@ -23,31 +23,12 @@
                                     </a>
                                 </div>
                             </div>
-                            <div class="col-lg-4 order-lg-3 text-lg-right align-self-lg-center">
-                                <div class="card-profile-actions py-4 mt-lg-0">
-                                    <base-button type="info" size="sm" class="mr-4">Connect</base-button>
-                                    <base-button type="default" size="sm" class="float-right">Message</base-button>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 order-lg-1">
-                                <div class="card-profile-stats d-flex justify-content-center">
-                                    <div>
-                                        <span class="heading">22</span>
-                                        <span class="description">Friends</span>
-                                    </div>
-                                    <div>
-                                        <span class="heading">10</span>
-                                        <span class="description">Photos</span>
-                                    </div>
-                                    <div>
-                                        <span class="heading">89</span>
-                                        <span class="description">Comments</span>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
-                        <div class="row d-flex justify-content-center mt-5"> 
-                            <table v-if="data.length > 0 && !isLoading">
+                          <div class="text-center mt-4 mb-2">
+                              <h3>Balance List</h3>
+                              <p>UnJDead.store</p>
+                            </div>
+                            <table class="table b-table table-striped table-hover" v-if="data.length > 0 && !isLoading">
                               <thead>
                                 <tr>
                                   <th>No</th>
@@ -73,7 +54,6 @@
                                 <span class="alert-inner--text"><strong>Info!</strong> Data is Not Available</span>
                               </base-alert>
                             </div>
-                        </div>
                         <div class="mt-5 py-5 border-top text-center">
                             <div class="row justify-content-center">
                                 <div class="col-lg-9">
@@ -114,7 +94,7 @@ export default {
       this.isLoading = true
       await getDataBalances()
       .then(({data})=> {
-        this.data = data
+        this.data = data.data
         this.isLoading = false
       })
       .catch((error) => {
@@ -128,21 +108,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-}
-
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
-
-tr:nth-child(even) {
-  background-color: #dddddd;
-}
-</style>

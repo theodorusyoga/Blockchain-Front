@@ -4,7 +4,7 @@ import { readToken } from '../middleware/authenticated';
 
 const BASE_URL = process.env.VUE_APP_BASE_URL
 const token = readToken()
-const header = { 
+const header = {
   'Content-type': 'application/json',
   'Authorization': token
 }
@@ -29,9 +29,12 @@ export const getDataBalance = id => {
 
 export const getDataBalances = () => {
   const config = {
-    url: `${BASE_URL}/users/balances`,
     method: 'get',
-    headers: header
+    headers: header,
+    params: {
+      limit: 10,
+      page: 1
+    }
   }
-  return axios(config)
+  return axios.get(`${BASE_URL}/users/balances`, config)
 }
