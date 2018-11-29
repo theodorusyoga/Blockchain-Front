@@ -27,13 +27,13 @@ export const getDataBalance = id => {
   return axios(config)
 }
 
-export const getDataBalances = () => {
+export const getDataBalances = (limit, page) => {
   const config = {
     method: 'get',
     headers: header,
     params: {
-      limit: 10,
-      page: 1
+      limit,
+      page
     }
   }
   return axios.get(`${BASE_URL}/users/balances`, config)

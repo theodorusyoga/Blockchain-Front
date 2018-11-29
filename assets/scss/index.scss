@@ -1,0 +1,20 @@
+.section-shaped{
+  .shape-style-1{
+    &.shape-primary{
+      background: linear-gradient(150deg, #2980b9 15%, #0984e3 70%, #3498db 94%);
+    }
+  }
+}
+
+.section-profile-cover{
+  height: 400px;
+}
+
+.page-item{
+  &.active{
+    .page-link{
+      background-color: #2980b9;
+      border-color: #2980b9;
+    }
+  }
+}

@@ -28,25 +28,28 @@
                               <h3>Balance List</h3>
                               <p>UnJDead.store</p>
                             </div>
-                            <table class="table b-table table-striped table-hover" v-if="data.length > 0 && !isLoading">
-                              <thead>
-                                <tr>
-                                  <th>No</th>
-                                  <th>Name</th>
-                                  <th>Dollars</th>
-                                  <th>Amount</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr v-for="(data, index) in data" :key="data.unique_id">
-                                  <td>{{index+1}}</td>
-                                  <td>{{data.name}}</td>
-                                  <td>{{data.dollars}}</td>
-                                  <td>{{data.amount}}</td>
-                                </tr>
-                              </tbody>
-                            </table>
-                            <div v-else-if="data.length === 0 && isLoading">
+                            <div class="table-data" v-if="data.length > 0 && !isLoading">
+                              <table class="table b-table table-striped table-hover" >
+                                <thead>
+                                  <tr>
+                                    <th>No</th>
+                                    <th>Name</th>
+                                    <th>Dollars</th>
+                                    <th>Amount</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr v-for="(data, index) in data" :key="data.unique_id">
+                                    <td>{{index+1}}</td>
+                                    <td>{{data.name}}</td>
+                                    <td>{{data.dollars}}</td>
+                                    <td>{{data.amount}}</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                              <b-pagination align="center" size="md" :total-rows="total_data" v-model="current_page" :per-page="per_page" @input="getData" />
+                            </div>
+                            <div v-else-if="isLoading" class="my-4">
                             <vue-loading type="bars" color="rgb(32, 160, 255)" :size="{ width: '50px', height: '50px' }"></vue-loading>
                             </div>
                             <div v-else>
@@ -54,20 +57,16 @@
                                 <span class="alert-inner--text"><strong>Info!</strong> Data is Not Available</span>
                               </base-alert>
                             </div>
-                        <div class="mt-5 py-5 border-top text-center">
-                            <div class="row justify-content-center">
-                                <div class="col-lg-9">
-                                    <p>An artist of considerable range, Ryan — the name taken by Melbourne-raised, Brooklyn-based Nick Murphy — writes, performs and records all of his own music, giving it a warm, intimate feel with a solid groove structure. An artist of considerable range.</p>
-                                    <a href="#">Show more</a>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </card>
             </div>
         </section>
     </div>
 </template>
+
+<style lang="scss">
+  @import '../assets/scss/index.scss';
+</style>
 
 <script>
 import Logo from '~/components/Logo.vue'
@@ -83,7 +82,10 @@ export default {
   data() {
     return {
       isLoading: true,
-      data: []
+      data: [],
+      total_data: 0,
+      current_page: 1,
+      per_page: 10
     }
   },
   mounted() {
@@ -92,9 +94,10 @@ export default {
   methods: {
     async getData() {
       this.isLoading = true
-      await getDataBalances()
+      await getDataBalances(this.per_page, this.current_page)
       .then(({data})=> {
         this.data = data.data
+        this.total_data = data.meta.total_data
         this.isLoading = false
       })
       .catch((error) => {
